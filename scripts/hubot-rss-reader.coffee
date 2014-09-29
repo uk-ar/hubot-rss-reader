@@ -45,6 +45,10 @@ module.exports = (robot) ->
 
   checker.on 'new entry', (entry) ->
     last_state_is_error[entry.feed.url] = false
+    if entry.args.room?
+      debug "#{entry.title} #{entry.url} => #{entry.args.room}"
+      robot.messageRoom '#'+entry.args.room, entry.toString()
+      return
     for room, feeds of checker.getAllFeeds()
       if _.include feeds, entry.feed.url
         debug "#{entry.title} #{entry.url} => #{room}"
@@ -69,7 +73,7 @@ module.exports = (robot) ->
         msg.send res
         resolve url
     .then (url) ->
-      checker.fetch url
+      checker.fetch {url: url, room: msg.message.room}
     .then (entries) ->
       for entry in entries
         msg.send entry.toString()
