@@ -29,7 +29,7 @@ module.exports = (robot) ->
   ## wait until connect redis
   setTimeout ->
     run = (opts) ->
-      checker.check opts
+      checker.check(opts)
       .then ->
         debug "wait #{process.env.HUBOT_RSS_INTERVAL} seconds"
         setTimeout run, 1000 * process.env.HUBOT_RSS_INTERVAL
@@ -64,7 +64,7 @@ module.exports = (robot) ->
     url = msg.match[2].trim()
     last_state_is_error[url] = false
     debug "add #{url}"
-    checker.addFeed msg.message.room, url
+    checker.addFeed(msg.message.room, url)
     .then (res) ->
       new Promise (resolve) ->
         msg.send res
